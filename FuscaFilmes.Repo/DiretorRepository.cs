@@ -1,6 +1,6 @@
 using System;
-using FuscaFilmes.API.DbContexts;
 using FuscaFilmes.Domain.Entities;
+using FuscaFilmes.Repo.Contexts;
 using FuscaFilmes.Repo.Contracts;
 using Microsoft.EntityFrameworkCore;
 

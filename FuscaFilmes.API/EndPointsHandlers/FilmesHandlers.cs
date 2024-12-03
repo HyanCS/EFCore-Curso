@@ -1,26 +1,26 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
-using FuscaFilmes.API.DbContexts;
 using FuscaFilmes.API.Models;
 using FuscaFilmes.Domain.Entities;
+using FuscaFilmes.Repo.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace FuscaFilmes.API.EndPointsHandlers;
 
 public static class FilmesHandlers
 {
-    public static List<Filme> GetFilmesById(int id,
+    public static IEnumerable<Filme> GetFilmesById(int id,
         Context context)
     {
         return context.Filmes
         .Where(filme => filme.Id == id)
-        .Include(filme => filme.Diretor).ToList();
+        .Include(filme => filme.Diretores).ToList();
     }
 
-    public static List<Filme> GetFilmes(Context context)
+    public static IEnumerable<Filme> GetFilmes(Context context)
     {
         return context.Filmes
-        .Include(filme => filme.Diretor)
+        .Include(filme => filme.Diretores)
         //.OrderBy
         .OrderByDescending(filme => filme.Ano)
         //.ThenBy
@@ -29,12 +29,12 @@ public static class FilmesHandlers
 
     }
 
-    public static List<Filme> GetFilmeContainsByTitulo(string titulo,
+    public static IEnumerable<Filme> GetFilmeContainsByTitulo(string titulo,
         Context context)
     {
         return context.Filmes
         .Where(filme => filme.Titulo.Contains(titulo))
-        .Include(filme => filme.Diretor).ToList();
+        .Include(filme => filme.Diretores).ToList();
 
         // Raramente mais útil, função do EF similar para busca no banco de dados
         //  return context.Filmes
@@ -57,7 +57,7 @@ public static class FilmesHandlers
        .Where(filme =>
        EF.Functions.Like(filme.Titulo, $"%{titulo}%")
        )
-       .Include(filme => filme.Diretor).ToList();
+       .Include(filme => filme.Diretores).ToList();
     }
 
     public static void ExecuteDeleteFilme(Context context, int filmeId)
