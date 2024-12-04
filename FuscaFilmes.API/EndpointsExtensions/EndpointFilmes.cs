@@ -7,18 +7,18 @@ public static class EndpointFilmes
 {
     public static void FilmesEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/filmes/{id}", FilmesHandlers.GetFilmesById).WithOpenApi();
+        app.MapGet("/filmes/{id}", FilmesHandlers.GetFilmesByIdAsync).WithOpenApi();
 
-        app.MapGet("/filmes", FilmesHandlers.GetFilmes).WithOpenApi();
+        app.MapGet("/filmes", FilmesHandlers.GetFilmesAsync).WithOpenApi();
 
-        app.MapGet("/filmesContains/byName/{titulo}", FilmesHandlers.GetFilmeContainsByTitulo).WithOpenApi();
+        app.MapGet("/filmesContains/byName/{titulo}", FilmesHandlers.GetFilmeContainsByTituloAsync).WithOpenApi();
 
-        app.MapGet("/filmesEFFunctions/byName/{titulo}", FilmesHandlers.GetFilmeEFFunctionsByTitulo).WithOpenApi();
+        app.MapGet("/filmesEFFunctions/byName/{titulo}", FilmesHandlers.GetFilmeEFFunctionsByTituloAsync).WithOpenApi();
 
-        app.MapDelete("/filmes/{filmeId}", FilmesHandlers.ExecuteDeleteFilme).WithOpenApi();
+        app.MapDelete("/filmes/{filmeId}", FilmesHandlers.ExecuteDeleteFilmeAsync).WithOpenApi();
         // Patch Altera parcial, Put total
-        app.MapPatch("/filmesUpdate", FilmesHandlers.UpdateFilme).WithOpenApi();
+        app.MapPatch("/filmesUpdate", FilmesHandlers.UpdateFilmeAsync).WithOpenApi();
 
-        app.MapPatch("/filmesExecuteUpdate", FilmesHandlers.ExecuteUpdateFilme).WithOpenApi();
+        app.MapPatch("/filmesExecuteUpdate", FilmesHandlers.ExecuteUpdateFilmeAsync).WithOpenApi();
     }
 }

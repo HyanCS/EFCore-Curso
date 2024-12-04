@@ -9,70 +9,58 @@ namespace FuscaFilmes.API.EndPointsHandlers;
 
 public static class FilmesHandlers
 {
-    public static IEnumerable<Filme> GetFilmesById(int id,
+    public static async Task<IEnumerable<Filme>> GetFilmesByIdAsync(int id,
         Context context)
     {
-        return context.Filmes
+        return await context.Filmes
+        .Include(filme => filme.Diretores)
         .Where(filme => filme.Id == id)
-        .Include(filme => filme.Diretores).ToList();
+        .ToListAsync();
     }
 
-    public static IEnumerable<Filme> GetFilmes(Context context)
+    public static async Task<IEnumerable<Filme>> GetFilmesAsync(Context context)
     {
-        return context.Filmes
+        return await context.Filmes
         .Include(filme => filme.Diretores)
         //.OrderBy
         .OrderByDescending(filme => filme.Ano)
         //.ThenBy
         .ThenByDescending(filme => filme.Titulo)
-        .ToList();
+        .ToListAsync();
 
     }
 
-    public static IEnumerable<Filme> GetFilmeContainsByTitulo(string titulo,
+    public static async Task<IEnumerable<Filme>> GetFilmeContainsByTituloAsync(string titulo,
         Context context)
     {
-        return context.Filmes
+        return await context.Filmes
+        .Include(filme => filme.Diretores)
         .Where(filme => filme.Titulo.Contains(titulo))
-        .Include(filme => filme.Diretores).ToList();
-
-        // Raramente mais útil, função do EF similar para busca no banco de dados
-        //  return context.Filmes
-        // .Where(filme =>
-        // EF.Functions.Like(filme.Titulo, $"%{titulo}%")
-        // )
-        // .Include(filme => filme.Diretor).ToList();
+        .ToListAsync();
 
     }
 
-    public static List<Filme> GetFilmeEFFunctionsByTitulo(string titulo,
+    public static async Task<IEnumerable<Filme>> GetFilmeEFFunctionsByTituloAsync(string titulo,
         Context context)
     {
-        // return context.Filmes
-        // .Where(filme => filme.Titulo.Contains(titulo))
-        // .Include(filme => filme.Diretor).ToList();
-
-        // Raramente mais útil, função do EF similar para busca no banco de dados
-        return context.Filmes
+        return await context.Filmes
+       .Include(filme => filme.Diretores)
        .Where(filme =>
        EF.Functions.Like(filme.Titulo, $"%{titulo}%")
        )
-       .Include(filme => filme.Diretores).ToList();
+       .ToListAsync();
     }
 
-    public static void ExecuteDeleteFilme(Context context, int filmeId)
+    public static async void ExecuteDeleteFilmeAsync(Context context, int filmeId)
     {
-        //   var diretor = context.Filmes.Find(filmeId);
-        //   if (filme != null)
-        context.Filmes
+        await context.Filmes
         .Where(filme => filme.Id == filmeId)
-        .ExecuteDelete<Filme>(); // return number of rows affected by deletion
-        //    context.SaveChanges(); 
+        .ExecuteDeleteAsync<Filme>(); // return number of rows affected by deletion
     }
 
-    public static IResult UpdateFilme(Context context, FilmeUpdate filmeUpdate)
+    public static async Task<IResult> UpdateFilmeAsync(Context context, FilmeUpdate filmeUpdate)
     {
-        var filme = context.Filmes.Find(filmeUpdate.Id);
+        var filme = await context.Filmes.FindAsync(filmeUpdate.Id);
 
         if (filme == null)
         {
@@ -83,16 +71,16 @@ public static class FilmesHandlers
         filme.Ano = filmeUpdate.Ano;
 
         context.Filmes.Update(filme);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.Ok($"Filme com ID {filmeUpdate.Id} foi atualizado com sucesso!");
     }
 
-    public static IResult ExecuteUpdateFilme (Context context, FilmeUpdate filmeUpdate)
+    public static async Task<IResult> ExecuteUpdateFilmeAsync (Context context, FilmeUpdate filmeUpdate)
 { 
-    var affectedRows = context.Filmes
+    var affectedRows = await context.Filmes
    .Where (filme => filme.Id == filmeUpdate.Id)
-   .ExecuteUpdate(setter => setter // return number of rows affected by update
+   .ExecuteUpdateAsync(setter => setter // return number of rows affected by update
    .SetProperty(f => f.Titulo, filmeUpdate.Titulo)
    .SetProperty(f => f.Ano, filmeUpdate.Ano)
    ); 
