@@ -9,16 +9,16 @@ public static class EndpointDiretores
 
     public static void DiretoresEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/diretores", DiretoresHandlers.GetDiretores).WithOpenApi();
+        app.MapGet("/diretores", DiretoresHandlers.GetDiretoresAsync).WithOpenApi();
 
-        app.MapGet("/diretores/agregacao{name}", DiretoresHandlers.GetDiretorByName).WithOpenApi();
+        app.MapGet("/diretores/agregacao{name}", DiretoresHandlers.GetDiretorByNameAsync).WithOpenApi();
 
-        app.MapGet("/diretores/where{id}", DiretoresHandlers.GetDiretoresById).WithOpenApi();
+        app.MapGet("/diretores/where{id}", DiretoresHandlers.GetDiretoresByIdAsync).WithOpenApi();
 
-        app.MapPost("/diretores", DiretoresHandlers.AddDiretor).WithOpenApi();
+        app.MapPost("/diretores", DiretoresHandlers.AddDiretorAsync).WithOpenApi();
 
-        app.MapPut("/diretores", DiretoresHandlers.UpdateDiretor).WithOpenApi();
+        app.MapPut("/diretores", DiretoresHandlers.UpdateDiretorAsync).WithOpenApi();
 
-        app.MapDelete("/diretores", DiretoresHandlers.DeleteDiretor).WithOpenApi();
+        app.MapDelete("/diretores", DiretoresHandlers.DeleteDiretorAsync).WithOpenApi();
     }
 }
